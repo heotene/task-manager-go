@@ -1,33 +1,76 @@
 {{define "content"}}
 
-<h2>Create Task</h2>
-
+<h1>Create New Task</h1>
 
 <form method="POST" action="/tasks/new">
 
+    <label>Title</label>
+    <input type="text" name="title">
 
-<label>Title</label><br>
+    <label>Description</label>
+    <textarea name="description"></textarea>
 
-<input type="text" name="title" required>
+    <label>Priority</label>
+    <select name="priority">
+        <option value="High">High</option>
+        <option value="Medium" selected>Medium</option>
+        <option value="Low">Low</option>
+    </select>
 
+    <label>Category</label>
+    <select name="category">
+        <option value="Work">Work</option>
+        <option value="Study">Study</option>
+        <option value="Personal">Personal</option>
+    </select>
 
-<br><br>
+    <label>Due Date</label>
+    <input type="date" name="due_date">
 
-
-<label>Description</label><br>
-
-<textarea name="description"></textarea>
-
-
-<br><br>
-
-
-<button type="submit">
-Create Task
-</button>
-
+    <button type="submit">
+        Create Task
+    </button>
 
 </form>
 
-
 {{end}}
+
+<label>Title</label>
+<input type="text" name="title" required>
+
+
+<label>Description</label>
+<textarea name="description"></textarea>
+
+
+<label>Priority</label>
+<select name="priority">
+
+    <option value="High">High</option>
+
+    <option value="Medium" selected>Medium</option>
+
+    <option value="Low">Low</option>
+
+</select>
+
+
+<label>Category</label>
+<select name="category">
+
+    <option value="Work">Work</option>
+
+    <option value="Study">Study</option>
+
+    <option value="Personal">Personal</option>
+
+</select>
+
+
+<label>Due Date</label>
+<input type="date" name="due_date">
+
+
+<button type="submit">
+    Create Task
+</button>

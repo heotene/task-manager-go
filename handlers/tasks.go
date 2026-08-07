@@ -33,26 +33,29 @@ func Tasks(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewTask(w http.ResponseWriter, r *http.Request) {
+	userID := middleware.GetUserID(r)
+	if userID == 0 {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
 
 	if r.Method == "POST" {
-
-		userID := middleware.GetUserID(r)
-
 		task := models.Task{
 			Title:       r.FormValue("title"),
 			Description: r.FormValue("description"),
+			Priority:    r.FormValue("priority"),
+			Category:    r.FormValue("category"),
+			DueDate:     r.FormValue("due_date"),
 			UserID:      userID,
 		}
 
 		err := database.CreateTask(task)
-
 		if err != nil {
 			http.Error(w, err.Error(), 500)
 			return
 		}
 
 		http.Redirect(w, r, "/tasks", http.StatusSeeOther)
-
 		return
 	}
 
@@ -94,9 +97,18 @@ func EditTask(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 
 		task := models.Task{
-			ID:          id,
-			Title:       r.FormValue("title"),
+
+			ID: id,
+
+			Title: r.FormValue("title"),
+
 			Description: r.FormValue("description"),
+
+			Priority: r.FormValue("priority"),
+
+			Category: r.FormValue("category"),
+
+			DueDate: r.FormValue("due_date"),
 		}
 
 		err := database.UpdateTask(task)

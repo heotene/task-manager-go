@@ -1,45 +1,65 @@
 {{define "content"}}
 
-<section class="dashboard">
+<h1>Dashboard</h1>
 
-    <h1>Dashboard</h1>
+<p class="welcome">
+    Welcome back,
+    <strong>{{.User.FullName}}</strong> 👋
+</p>
 
-    <p class="welcome">
-        Welcome back,
-        <strong>{{.User.FullName}}</strong> 👋
-    </p>
 
-    <div class="stats">
+<div class="stats">
 
-        <div class="stat-card total">
-            <h3>Total Tasks</h3>
-            <h1>{{.TotalTasks}}</h1>
-        </div>
-
-        <div class="stat-card completed">
-            <h3>Completed</h3>
-            <h1>{{.CompletedTasks}}</h1>
-        </div>
-
-        <div class="stat-card pending">
-            <h3>Pending</h3>
-            <h1>{{.PendingTasks}}</h1>
-        </div>
-
+    <div class="stat-card total">
+        <h3>Total Tasks</h3>
+        <h1>{{.TotalTasks}}</h1>
     </div>
 
-    <div class="dashboard-actions">
 
-        <a href="/tasks" class="btn">
-            📋 View Tasks
-        </a>
-
-        <a href="/tasks/new" class="btn btn-success">
-            ➕ New Task
-        </a>
-
+    <div class="stat-card completed">
+        <h3>Completed</h3>
+        <h1>{{.CompletedTasks}}</h1>
     </div>
 
-</section>
+
+    <div class="stat-card pending">
+        <h3>Pending</h3>
+        <h1>{{.PendingTasks}}</h1>
+    </div>
+
+
+    <div class="stat-card high">
+        <h3>🔴 High Priority</h3>
+        <h1>{{.HighPriorityTasks}}</h1>
+    </div>
+
+
+    <div class="stat-card due">
+        <h3>📅 Due Today</h3>
+        <h1>{{.DueTodayTasks}}</h1>
+    </div>
+
+
+    <div class="stat-card rate">
+        <h3>📈 Completion Rate</h3>
+        <h1>{{.CompletionRate}}%</h1>
+    </div>
+
+</div>
+
+
+<div class="dashboard-actions">
+
+    <a href="/tasks" class="btn">
+        📋 View Tasks
+    </a>
+
+
+    <a href="/tasks/new" class="btn btn-success">
+        ➕ New Task
+    </a>
+
+</div>
+
 
 {{end}}

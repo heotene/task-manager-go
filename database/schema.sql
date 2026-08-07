@@ -10,18 +10,13 @@ CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     description TEXT,
-    completed BOOLEAN DEFAULT FALSE,
-    user_id INTEGER,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(user_id) REFERENCES users(id)
-);
-CREATE TABLE IF NOT EXISTS tasks (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    description TEXT,
+    priority TEXT DEFAULT 'Medium',
+    category TEXT DEFAULT 'General',
+    due_date TEXT,
     completed BOOLEAN DEFAULT 0,
     user_id INTEGER NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY(user_id) REFERENCES users(id)
 );

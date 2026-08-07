@@ -1,0 +1,29 @@
+{{define "content"}}
+
+<h2>Edit Task</h2>
+
+<form method="POST">
+
+<label>Title</label><br>
+
+<input
+	type="text"
+	name="title"
+	value="{{.Task.Title}}"
+	required>
+
+<br><br>
+
+<label>Description</label><br>
+
+<textarea name="description">{{.Task.Description}}</textarea>
+
+<br><br>
+
+<button type="submit">
+Save Changes
+</button>
+
+</form>
+
+{{end}}

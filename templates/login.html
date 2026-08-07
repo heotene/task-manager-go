@@ -1,0 +1,51 @@
+{{define "content"}}
+
+<div class="auth-container">
+
+    <div class="auth-card">
+
+        <h1>Welcome Back 👋</h1>
+
+        <p class="auth-subtitle">
+            Sign in to continue managing your tasks.
+        </p>
+
+        <form method="POST" action="/login">
+
+            <label>Email Address</label>
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required>
+
+            <label>Password</label>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                required>
+
+            <button type="submit" class="btn auth-btn">
+                Login
+            </button>
+
+        </form>
+
+        <p class="auth-footer">
+
+            Don't have an account?
+
+            <a href="/register">
+                Register
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+{{end}}

@@ -188,3 +188,59 @@ func UpdateTask(task models.Task) error {
 
 	return err
 }
+func SearchTasks(userID int, search string) ([]models.Task, error) {
+
+	rows, err := DB.Query(`
+		SELECT 
+			id,
+			title,
+			description,
+			priority,
+			category,
+			due_date,
+			completed,
+			user_id
+		FROM tasks
+		WHERE user_id = ?
+		AND (
+			title LIKE ?
+			OR description LIKE ?
+		)
+	`,
+		userID,
+		"%"+search+"%",
+		"%"+search+"%",
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var tasks []models.Task
+
+	for rows.Next() {
+
+		var task models.Task
+
+		err := rows.Scan(
+			&task.ID,
+			&task.Title,
+			&task.Description,
+			&task.Priority,
+			&task.Category,
+			&task.DueDate,
+			&task.Completed,
+			&task.UserID,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		tasks = append(tasks, task)
+	}
+
+	return tasks, nil
+}

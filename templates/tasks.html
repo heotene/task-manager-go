@@ -9,6 +9,20 @@
     </a>
 
 </div>
+<form method="GET" action="/tasks" class="search-form">
+
+    <input 
+        type="text" 
+        name="search" 
+        placeholder="🔍 Search tasks..."
+        value="{{.Search}}"
+    >
+
+    <button type="submit" class="btn">
+        Search
+    </button>
+
+</form>
 
 
 {{if .Tasks}}

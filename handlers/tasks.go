@@ -19,7 +19,21 @@ func Tasks(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tasks, err := database.GetTasksByUser(userID)
+	search := r.URL.Query().Get("search")
+
+	var tasks []models.Task
+
+	var err error
+
+	if search != "" {
+
+		tasks, err = database.SearchTasks(userID, search)
+
+	} else {
+
+		tasks, err = database.GetTasksByUser(userID)
+
+	}
 
 	if err != nil {
 		http.Error(w, err.Error(), 500)
@@ -27,9 +41,10 @@ func Tasks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.Render(w, "tasks.html", models.PageData{
-		Title: "Tasks",
-		Tasks: tasks,
+		Tasks:  tasks,
+		Search: search,
 	})
+
 }
 
 func NewTask(w http.ResponseWriter, r *http.Request) {

@@ -7,6 +7,8 @@ type PageData struct {
 
 	User User
 
+	Search string
+
 	// Dashboard
 	TotalTasks     int
 	CompletedTasks int

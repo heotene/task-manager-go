@@ -2,7 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/resend/resend-go/v2"
@@ -45,11 +44,8 @@ func SendVerificationCode(email string, code string) error {
 	apiKey := os.Getenv("RESEND_API_KEY")
 
 	if apiKey == "" {
-		log.Println("RESEND_API_KEY: NOT FOUND")
 		return fmt.Errorf("RESEND_API_KEY is not configured")
 	}
-
-	log.Println("RESEND_API_KEY: FOUND")
 
 	client := resend.NewClient(apiKey)
 

@@ -1,41 +1,21 @@
 {{define "header"}}
 
-<aside class="sidebar">
+<header>
+    <div class="navbar">
 
-    <h2>📋 Task Manager</h2>
+        <div class="logo">
+            <h2>Myjob</h2>
+        </div>
 
-    <ul>
+        <nav>
+            <a href="/dashboard">📊 Dashboard</a>
+            <a href="/tasks">📋 Tasks</a>
+            <a href="/profile">👤 Profile</a>
+            <a href="/settings">⚙️ Settings</a>
+            <a href="/logout" class="logout">🚪 Logout</a>
+        </nav>
 
-        <li>
-            <a href="/dashboard">
-                <i class="fa-solid fa-house"></i>
-                Dashboard
-            </a>
-        </li>
-
-        <li>
-            <a href="/tasks">
-                <i class="fa-solid fa-list-check"></i>
-                My Tasks
-            </a>
-        </li>
-
-        <li>
-            <a href="/tasks/new">
-                <i class="fa-solid fa-plus"></i>
-                New Task
-            </a>
-        </li>
-
-        <li>
-            <a href="/logout">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                Logout
-            </a>
-        </li>
-
-    </ul>
-
-</aside>
+    </div>
+</header>
 
 {{end}}

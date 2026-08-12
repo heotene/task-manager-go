@@ -1,151 +1,306 @@
 {{define "content"}}
 
-<div class="page-header">
+<div class="tasks-page">
 
-    <h1>📋 My Tasks</h1>
+    <!-- Page Header -->
+    <div class="page-header">
 
-    <a href="/tasks/new" class="btn btn-success">
-        ➕ New Task
-    </a>
+        <div>
+            <h1>📋 My Tasks</h1>
+            <p class="page-subtitle">
+                Manage, organize and track your tasks.
+            </p>
+        </div>
 
-</div>
-<form method="GET" action="/tasks" class="search-form">
+        <a href="/tasks/new" class="btn btn-success">
+            ➕ New Task
+        </a>
 
-    <input 
-        type="text" 
-        name="search" 
-        placeholder="🔍 Search tasks..."
-        value="{{.Search}}"
-    >
-
-    <button type="submit" class="btn">
-        Search
-    </button>
-
-</form>
+    </div>
 
 
-{{if .Tasks}}
+    <!-- Search & Filters -->
+    <form method="GET" action="/tasks" class="task-filters">
 
-<div class="task-grid">
+        <!-- Search -->
+        <div class="filter-group search-group">
 
-    {{range .Tasks}}
+            <label for="search">Search</label>
 
-    <div class="task-card">
-
-        <div class="task-header">
-
-            <h3>{{.Title}}</h3>
-
-            {{if .Completed}}
-
-            <span class="badge completed-badge">
-                Completed
-            </span>
-
-            {{else}}
-
-            <span class="badge pending-badge">
-                Pending
-            </span>
-
-            {{end}}
+            <input
+                type="text"
+                id="search"
+                name="search"
+                placeholder="🔍 Search tasks..."
+                value="{{.Search}}"
+            >
 
         </div>
 
 
-        <p class="task-description">
-            {{.Description}}
-        </p>
+        <!-- Priority -->
+        <div class="filter-group">
+
+            <label for="priority">Priority</label>
+
+            <select id="priority" name="priority">
+
+                <option value="">All Priorities</option>
+
+                <option value="High"
+                    {{if eq .Priority "High"}}selected{{end}}>
+                    🔴 High
+                </option>
+
+                <option value="Medium"
+                    {{if eq .Priority "Medium"}}selected{{end}}>
+                    🟡 Medium
+                </option>
+
+                <option value="Low"
+                    {{if eq .Priority "Low"}}selected{{end}}>
+                    🟢 Low
+                </option>
+
+            </select>
+
+        </div>
 
 
-        <div class="task-details">
+        <!-- Category -->
+        <div class="filter-group">
 
-            <p>
-    <strong>Priority:</strong>
+            <label for="category">Category</label>
 
-    {{if eq .Priority "High"}}
+            <select id="category" name="category">
 
-        <span class="priority high">
-            🔴 High
-        </span>
+                <option value="">All Categories</option>
 
-    {{else if eq .Priority "Medium"}}
+                <option value="Work"
+                    {{if eq .Category "Work"}}selected{{end}}>
+                    💼 Work
+                </option>
 
-        <span class="priority medium">
-            🟡 Medium
-        </span>
+                <option value="Personal"
+                    {{if eq .Category "Personal"}}selected{{end}}>
+                    👤 Personal
+                </option>
+
+                <option value="Study"
+                    {{if eq .Category "Study"}}selected{{end}}>
+                    📚 Study
+                </option>
+
+                <option value="Other"
+                    {{if eq .Category "Other"}}selected{{end}}>
+                    📌 Other
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- Status -->
+        <div class="filter-group">
+
+            <label for="status">Status</label>
+
+            <select id="status" name="status">
+
+                <option value="">All Tasks</option>
+
+                <option value="pending"
+                    {{if eq .Status "pending"}}selected{{end}}>
+                    ⏳ Pending
+                </option>
+
+                <option value="completed"
+                    {{if eq .Status "completed"}}selected{{end}}>
+                    ✅ Completed
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- Sort -->
+        <div class="filter-group">
+
+            <label for="sort">Sort By</label>
+
+            <select id="sort" name="sort">
+
+                <option value="">Newest</option>
+
+                <option value="due_asc"
+                    {{if eq .Sort "due_asc"}}selected{{end}}>
+                    📅 Due Date (Earliest)
+                </option>
+
+                <option value="due_desc"
+                    {{if eq .Sort "due_desc"}}selected{{end}}>
+                    📅 Due Date (Latest)
+                </option>
+
+                <option value="title"
+                    {{if eq .Sort "title"}}selected{{end}}>
+                    🔤 Title
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- Buttons -->
+        <div class="filter-buttons">
+
+            <button type="submit" class="btn">
+                🔍 Filter
+            </button>
+
+            <a href="/tasks" class="btn btn-secondary">
+                Reset
+            </a>
+
+        </div>
+
+    </form>
+
+
+    <!-- Tasks -->
+    {{if .Tasks}}
+
+    <div class="task-grid">
+
+        {{range .Tasks}}
+
+        <div class="task-card">
+
+            <div class="task-header">
+
+                <h3>{{.Title}}</h3>
+
+                {{if .Completed}}
+
+                <span class="badge completed-badge">
+                    ✅ Completed
+                </span>
+
+                {{else}}
+
+                <span class="badge pending-badge">
+                    ⏳ Pending
+                </span>
+
+                {{end}}
+
+            </div>
+
+
+            {{if .Description}}
+
+            <p class="task-description">
+                {{.Description}}
+            </p>
+
+            {{end}}
+
+
+            <div class="task-details">
+
+                <p>
+                    <strong>Priority:</strong>
+
+                    {{if eq .Priority "High"}}
+                        <span class="priority high">🔴 High</span>
+
+                    {{else if eq .Priority "Medium"}}
+                        <span class="priority medium">🟡 Medium</span>
+
+                    {{else}}
+                        <span class="priority low">🟢 Low</span>
+                    {{end}}
+
+                </p>
+
+
+                <p>
+                    <strong>Category:</strong>
+                    {{.Category}}
+                </p>
+
+
+                <p>
+                    <strong>Due Date:</strong>
+                    {{.DueDate}}
+                </p>
+
+            </div>
+
+
+            <div class="task-actions">
+
+                <a
+                    href="/tasks/edit?id={{.ID}}"
+                    class="btn-small edit-btn">
+                    ✏️ Edit
+                </a>
+
+
+                {{if not .Completed}}
+
+                <a
+                    href="/tasks/complete?id={{.ID}}"
+                    class="btn-small complete-btn">
+                    ✅ Complete
+                </a>
+
+                {{end}}
+
+
+                <a
+                    href="/tasks/delete?id={{.ID}}"
+                    class="btn-small delete-btn"
+                    onclick="return confirm('Are you sure you want to delete this task?');">
+                    🗑 Delete
+                </a>
+
+            </div>
+
+        </div>
+
+        {{end}}
+
+    </div>
+
 
     {{else}}
 
-        <span class="priority low">
-            🟢 Low
-        </span>
+    <!-- Empty State -->
 
-    {{end}}
+    <div class="empty-state">
 
-</p>
-
-            <p>
-                <strong>Category:</strong>
-                {{.Category}}
-            </p>
-
-            <p>
-                <strong>Due Date:</strong>
-                {{.DueDate}}
-            </p>
-
+        <div class="empty-icon">
+            📋
         </div>
 
+        <h2>No tasks found</h2>
 
-        <div class="task-actions">
+        <p>
+            Try changing your filters or create a new task.
+        </p>
 
-            <a href="/tasks/edit?id={{.ID}}" class="btn-small edit-btn">
-                ✏️ Edit
-            </a>
-
-
-            {{if not .Completed}}
-
-            <a href="/tasks/complete?id={{.ID}}" class="btn-small complete-btn">
-                ✅ Complete
-            </a>
-
-            {{end}}
-
-
-            <a href="/tasks/delete?id={{.ID}}" class="btn-small delete-btn">
-                🗑 Delete
-            </a>
-
-        </div>
-
+        <a href="/tasks/new" class="btn btn-success">
+            ➕ Create Task
+        </a>
 
     </div>
 
     {{end}}
 
 </div>
-
-
-{{else}}
-
-<div class="empty-state">
-
-    <h2>No Tasks Yet</h2>
-
-    <p>
-        Create your first task to get started.
-    </p>
-
-    <a href="/tasks/new" class="btn btn-success">
-        ➕ Create Task
-    </a>
-
-</div>
-
-{{end}}
-
 
 {{end}}

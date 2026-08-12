@@ -1,29 +1,192 @@
 {{define "content"}}
 
-<h2>Edit Task</h2>
+<div class="auth-container">
 
-<form method="POST">
 
-<label>Title</label><br>
+    <div class="auth-card">
 
-<input
-	type="text"
-	name="title"
-	value="{{.Task.Title}}"
-	required>
 
-<br><br>
 
-<label>Description</label><br>
+        <h1>
+            ✏️ Edit Task
+        </h1>
+        {{if .Error}} <div class="form-error"> ⚠️ {{.Error}} </div> {{end}}
 
-<textarea name="description">{{.Task.Description}}</textarea>
 
-<br><br>
+        <p class="auth-subtitle">
+            Update your task details
+        </p>
 
-<button type="submit">
-Save Changes
-</button>
 
-</form>
+
+
+
+
+        <form method="POST" action="/tasks/edit">
+
+
+
+            <input 
+                type="hidden"
+                name="id"
+                value="{{.Task.ID}}"
+            >
+
+
+
+
+
+            <label>
+                📝 Task Title
+            </label>
+
+
+            <input
+                type="text"
+                name="title"
+                value="{{.Task.Title}}"
+                required
+            >
+
+
+
+
+
+
+            <label>
+                📄 Description
+            </label>
+
+
+            <textarea
+                name="description"
+                rows="5"
+            >{{.Task.Description}}</textarea>
+
+
+
+
+
+
+
+
+            <label>
+                🔥 Priority
+            </label>
+
+
+            <select name="priority">
+
+
+                <option value="High"
+                {{if eq .Task.Priority "High"}}selected{{end}}>
+                    🔴 High
+                </option>
+
+
+
+                <option value="Medium"
+                {{if eq .Task.Priority "Medium"}}selected{{end}}>
+                    🟡 Medium
+                </option>
+
+
+
+                <option value="Low"
+                {{if eq .Task.Priority "Low"}}selected{{end}}>
+                    🟢 Low
+                </option>
+
+
+
+            </select>
+
+
+
+
+
+
+
+
+
+            <label>
+                📂 Category
+            </label>
+
+
+            <select name="category">
+
+
+                <option value="Work"
+                {{if eq .Task.Category "Work"}}selected{{end}}>
+                    💼 Work
+                </option>
+
+
+
+                <option value="Study"
+                {{if eq .Task.Category "Study"}}selected{{end}}>
+                    📚 Study
+                </option>
+
+
+
+                <option value="Personal"
+                {{if eq .Task.Category "Personal"}}selected{{end}}>
+                    🏠 Personal
+                </option>
+
+
+
+            </select>
+
+
+
+
+
+
+
+
+
+            <label>
+                📅 Due Date
+            </label>
+
+
+            <input
+                type="date"
+                name="due_date"
+                value="{{.Task.DueDate}}"
+            >
+
+
+
+
+
+
+
+            <button
+            type="submit"
+            class="btn auth-btn">
+
+                💾 Save Changes
+
+            </button>
+
+
+
+
+
+        </form>
+
+
+
+
+
+    </div>
+
+
+</div>
+
 
 {{end}}

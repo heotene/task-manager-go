@@ -2,12 +2,22 @@ package models
 
 type PageData struct {
 	Title string
+	Name  string
+	User  User
 
-	Name string
+	// Messages
+	Error            string
+	Success          string
+	VerificationCode string
 
-	User User
+	VerificationMethod string
 
-	Search string
+	// Search and filters
+	Search   string
+	Priority string
+	Category string
+	Status   string
+	Sort     string
 
 	// Dashboard
 	TotalTasks     int
@@ -20,6 +30,10 @@ type PageData struct {
 
 	// Tasks
 	Tasks []Task
+	Task  Task
 
-	Task Task
+	// Recent dashboard tasks
+	RecentTasks []Task
+
+	ResetToken string
 }

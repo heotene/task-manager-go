@@ -78,23 +78,33 @@ func GetTasksByUser(userID int) ([]models.Task, error) {
 	return tasks, nil
 }
 
-// Mark task as completed
-func CompleteTask(id int) error {
+// Mark a user's task as completed
+func CompleteTask(id int, userID int) error {
 
-	_, err := DB.Exec(
-		"UPDATE tasks SET completed = 1 WHERE id = ?",
+	_, err := DB.Exec(`
+		UPDATE tasks
+		SET completed = 1,
+		    updated_at = CURRENT_TIMESTAMP
+		WHERE id = ?
+		AND user_id = ?
+	`,
 		id,
+		userID,
 	)
 
 	return err
 }
 
-// Delete a task
-func DeleteTask(id int) error {
+// Delete a user's task
+func DeleteTask(id int, userID int) error {
 
-	_, err := DB.Exec(
-		"DELETE FROM tasks WHERE id = ?",
+	_, err := DB.Exec(`
+		DELETE FROM tasks
+		WHERE id = ?
+		AND user_id = ?
+	`,
 		id,
+		userID,
 	)
 
 	return err
@@ -177,6 +187,7 @@ func UpdateTask(task models.Task) error {
 			due_date = ?,
 			updated_at = CURRENT_TIMESTAMP
 		WHERE id = ?
+		AND user_id = ?
 	`,
 		task.Title,
 		task.Description,
@@ -184,10 +195,12 @@ func UpdateTask(task models.Task) error {
 		task.Category,
 		task.DueDate,
 		task.ID,
+		task.UserID,
 	)
 
 	return err
 }
+
 func SearchTasks(userID int, search string) ([]models.Task, error) {
 
 	rows, err := DB.Query(`
@@ -243,4 +256,284 @@ func SearchTasks(userID int, search string) ([]models.Task, error) {
 	}
 
 	return tasks, nil
+}
+func GetDashboardAnalytics(userID int) (int, int, int, error) {
+
+	var highPriority int
+	var upcoming int
+	var completionRate int
+
+	// High-priority tasks
+	err := DB.QueryRow(`
+		SELECT COUNT(*)
+		FROM tasks
+		WHERE user_id = ?
+		AND priority = 'High'
+		AND completed = 0
+	`, userID).Scan(&highPriority)
+
+	if err != nil {
+		return 0, 0, 0, err
+	}
+
+	// Upcoming tasks
+	err = DB.QueryRow(`
+		SELECT COUNT(*)
+		FROM tasks
+		WHERE user_id = ?
+		AND completed = 0
+		AND due_date >= date('now')
+	`, userID).Scan(&upcoming)
+
+	if err != nil {
+		return 0, 0, 0, err
+	}
+
+	// Completion rate
+	var total int
+	var completed int
+
+	err = DB.QueryRow(`
+		SELECT COUNT(*)
+		FROM tasks
+		WHERE user_id = ?
+	`, userID).Scan(&total)
+
+	if err != nil {
+		return 0, 0, 0, err
+	}
+
+	err = DB.QueryRow(`
+		SELECT COUNT(*)
+		FROM tasks
+		WHERE user_id = ?
+		AND completed = 1
+	`, userID).Scan(&completed)
+
+	if err != nil {
+		return 0, 0, 0, err
+	}
+
+	if total > 0 {
+
+		completionRate = (completed * 100) / total
+
+	}
+
+	return highPriority, upcoming, completionRate, nil
+}
+
+// Get the 5 most recent tasks for a user
+func GetRecentTasks(userID int) ([]models.Task, error) {
+
+	rows, err := DB.Query(`
+		SELECT
+			id,
+			title,
+			description,
+			completed,
+			priority,
+			category,
+			due_date,
+			user_id
+		FROM tasks
+		WHERE user_id = ?
+		ORDER BY id DESC
+		LIMIT 5
+	`, userID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var tasks []models.Task
+
+	for rows.Next() {
+
+		var task models.Task
+
+		err := rows.Scan(
+			&task.ID,
+			&task.Title,
+			&task.Description,
+			&task.Completed,
+			&task.Priority,
+			&task.Category,
+			&task.DueDate,
+			&task.UserID,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		tasks = append(tasks, task)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return tasks, nil
+}
+
+// Search and filter tasks for a user
+func SearchAndFilterTasks(
+	userID int,
+	search string,
+	priority string,
+	category string,
+	status string,
+	sort string,
+) ([]models.Task, error) {
+
+	query := `
+		SELECT
+			id,
+			title,
+			description,
+			completed,
+			priority,
+			category,
+			due_date,
+			user_id
+		FROM tasks
+		WHERE user_id = ?
+	`
+
+	args := []interface{}{userID}
+
+	// Search
+	if search != "" {
+		query += `
+			AND (
+				title LIKE ?
+				OR description LIKE ?
+			)
+		`
+
+		searchValue := "%" + search + "%"
+
+		args = append(
+			args,
+			searchValue,
+			searchValue,
+		)
+	}
+
+	// Priority
+	if priority != "" {
+		query += ` AND priority = ?`
+		args = append(args, priority)
+	}
+
+	// Category
+	if category != "" {
+		query += ` AND category = ?`
+		args = append(args, category)
+	}
+
+	// Status
+	if status == "completed" {
+		query += ` AND completed = 1`
+	}
+
+	if status == "pending" {
+		query += ` AND completed = 0`
+	}
+
+	// Sorting
+	switch sort {
+
+	case "due_asc":
+		query += ` ORDER BY due_date ASC`
+
+	case "due_desc":
+		query += ` ORDER BY due_date DESC`
+
+	case "title":
+		query += ` ORDER BY title ASC`
+
+	default:
+		query += ` ORDER BY id DESC`
+	}
+
+	rows, err := DB.Query(query, args...)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var tasks []models.Task
+
+	for rows.Next() {
+
+		var task models.Task
+
+		err := rows.Scan(
+			&task.ID,
+			&task.Title,
+			&task.Description,
+			&task.Completed,
+			&task.Priority,
+			&task.Category,
+			&task.DueDate,
+			&task.UserID,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		tasks = append(tasks, task)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return tasks, nil
+}
+
+// Get a task by ID belonging to a specific user
+func GetTaskByIDAndUser(taskID int, userID int) (models.Task, error) {
+
+	var task models.Task
+
+	err := DB.QueryRow(`
+		SELECT
+			id,
+			title,
+			description,
+			priority,
+			category,
+			due_date,
+			completed,
+			created_at,
+			updated_at,
+			user_id
+		FROM tasks
+		WHERE id = ?
+		AND user_id = ?
+	`,
+		taskID,
+		userID,
+	).Scan(
+		&task.ID,
+		&task.Title,
+		&task.Description,
+		&task.Priority,
+		&task.Category,
+		&task.DueDate,
+		&task.Completed,
+		&task.CreatedAt,
+		&task.UpdatedAt,
+		&task.UserID,
+	)
+
+	return task, err
 }

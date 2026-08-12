@@ -1,0 +1,114 @@
+{{define "content"}}
+
+<div class="profile-container">
+
+
+    <div class="profile-card">
+
+
+        <div class="profile-avatar">
+
+            👤
+
+        </div>
+
+
+
+        <h1>
+            {{.User.FullName}}
+        </h1>
+
+
+        <p class="profile-email">
+
+            {{.User.Email}}
+
+        </p>
+
+
+
+
+
+        <div class="profile-details">
+
+
+            <div class="profile-item">
+
+                <span>
+                    📅
+                </span>
+
+                <div>
+
+                    <small>
+                        Member Since
+                    </small>
+
+                    <p>
+                        {{.User.CreatedAt}}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+
+
+            <div class="profile-item">
+
+                <span>
+                    🆔
+                </span>
+
+                <div>
+
+                    <small>
+                        User ID
+                    </small>
+
+                    <p>
+                        {{.User.ID}}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+
+
+
+
+        <div class="profile-actions">
+
+
+            <a href="/tasks" class="btn">
+
+                📋 My Tasks
+
+            </a>
+
+
+            <a href="/logout" class="btn logout-btn">
+
+                🚪 Logout
+
+            </a>
+
+
+        </div>
+
+
+
+    </div>
+
+
+</div>
+
+
+{{end}}

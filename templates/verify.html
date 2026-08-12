@@ -1,0 +1,54 @@
+{{define "content"}}
+
+<div class="auth-card">
+
+    <h1>🔐 Verify Your Account</h1>
+
+    <p class="auth-subtitle">
+        Enter the verification code sent to you.
+    </p>
+
+    {{if .Error}}
+        <div class="error-message">
+            ⚠️ {{.Error}}
+        </div>
+    {{end}}
+
+    {{if .VerificationCode}}
+        <div class="verification-test-code">
+            🧪 Test Code:
+            <strong>{{.VerificationCode}}</strong>
+        </div>
+    {{end}}
+
+    <form method="POST" action="/verify?id={{.User.ID}}">
+
+        <label for="code">
+            Verification Code
+        </label>
+
+        <input
+            type="text"
+            id="code"
+            name="code"
+            placeholder="Enter verification code"
+            maxlength="6"
+            required
+        >
+
+        <button
+            type="submit"
+            class="btn auth-btn">
+            Verify Account
+        </button>
+
+    </form>
+
+    <p class="auth-footer">
+        Didn't receive a code?
+        <a href="/register">Register again</a>
+    </p>
+
+</div>
+
+{{end}}

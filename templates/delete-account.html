@@ -1,0 +1,80 @@
+{{define "content"}}
+
+<div class="auth-container">
+
+    <div class="auth-card">
+
+        <h1>⚠️ Delete Account</h1>
+
+        <p class="auth-subtitle">
+            This action is permanent.
+        </p>
+
+        {{if .Error}}
+
+        <div class="error-message">
+            {{.Error}}
+        </div>
+
+        {{end}}
+
+        <div class="danger-warning">
+
+            <h3>Are you sure?</h3>
+
+            <p>
+                Deleting your account will permanently remove:
+            </p>
+
+            <ul>
+                <li>Your account</li>
+                <li>Your tasks</li>
+                <li>Your account information</li>
+            </ul>
+
+            <p>
+                <strong>This action cannot be undone.</strong>
+            </p>
+
+        </div>
+
+        <form method="POST" action="/settings/delete-account">
+
+            <div class="form-group">
+
+                <label for="confirmation">
+                    Type <strong>DELETE MY ACCOUNT</strong>
+                </label>
+
+                <input
+                    type="text"
+                    id="confirmation"
+                    name="confirmation"
+                    placeholder="DELETE MY ACCOUNT"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-danger"
+            >
+                Permanently Delete My Account
+            </button>
+
+        </form>
+
+        <div class="auth-footer">
+
+            <a href="/settings">
+                Cancel
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{{end}}

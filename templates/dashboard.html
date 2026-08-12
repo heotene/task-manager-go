@@ -1,65 +1,209 @@
 {{define "content"}}
 
-<h1>Dashboard</h1>
+<div class="dashboard">
 
-<p class="welcome">
-    Welcome back,
-    <strong>{{.User.FullName}}</strong> 👋
-</p>
+    <!-- Page Header -->
 
+    <div class="page-header">
 
-<div class="stats">
+        <div>
+            <h1>📊 Dashboard</h1>
 
-    <div class="stat-card total">
-        <h3>Total Tasks</h3>
-        <h1>{{.TotalTasks}}</h1>
+            <p class="welcome">
+                Welcome back,
+                <strong>{{.User.FullName}}</strong> 👋
+            </p>
+        </div>
+
+        <a href="/tasks/new" class="btn btn-success">
+            ➕ New Task
+        </a>
+
     </div>
 
 
-    <div class="stat-card completed">
-        <h3>Completed</h3>
-        <h1>{{.CompletedTasks}}</h1>
+    <!-- Main Statistics -->
+
+    <div class="stats">
+
+        <div class="stat-card total">
+            <h3>📋 Total Tasks</h3>
+            <h1>{{.TotalTasks}}</h1>
+        </div>
+
+
+        <div class="stat-card completed">
+            <h3>✅ Completed</h3>
+            <h1>{{.CompletedTasks}}</h1>
+        </div>
+
+
+        <div class="stat-card pending">
+            <h3>⏳ Pending</h3>
+            <h1>{{.PendingTasks}}</h1>
+        </div>
+
     </div>
 
 
-    <div class="stat-card pending">
-        <h3>Pending</h3>
-        <h1>{{.PendingTasks}}</h1>
+    <!-- Extra Statistics -->
+
+    <div class="stats">
+
+        <div class="stat-card high">
+            <h3>🔥 High Priority</h3>
+            <h1>{{.HighPriorityTasks}}</h1>
+        </div>
+
+
+        <div class="stat-card due">
+            <h3>📅 Due Today</h3>
+            <h1>{{.DueTodayTasks}}</h1>
+        </div>
+
+
+        <div class="stat-card rate">
+            <h3>📈 Completion Rate</h3>
+            <h1>{{.CompletionRate}}%</h1>
+        </div>
+
     </div>
 
 
-    <div class="stat-card high">
-        <h3>🔴 High Priority</h3>
-        <h1>{{.HighPriorityTasks}}</h1>
+    <!-- Completion Progress -->
+
+    <div class="progress-card">
+
+        <div class="progress-header">
+
+            <div>
+                <h2>🎯 Task Progress</h2>
+                <p>Keep going! You're making progress.</p>
+            </div>
+
+            <strong>{{.CompletionRate}}%</strong>
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                style="width: {{.CompletionRate}}%;">
+            </div>
+
+        </div>
+
     </div>
 
 
-    <div class="stat-card due">
-        <h3>📅 Due Today</h3>
-        <h1>{{.DueTodayTasks}}</h1>
+    <!-- Recent Tasks -->
+
+    <div class="recent-tasks">
+
+        <div class="section-header">
+
+            <div>
+                <h2>📝 Recent Tasks</h2>
+
+                <p>
+                    Your latest tasks
+                </p>
+            </div>
+
+            <a href="/tasks" class="view-all">
+                View All →
+            </a>
+
+        </div>
+
+
+        {{if .RecentTasks}}
+
+        <div class="recent-task-list">
+
+            {{range .RecentTasks}}
+
+            <div class="recent-task">
+
+                <div class="recent-task-info">
+
+                    <h3>{{.Title}}</h3>
+
+                    {{if .Description}}
+                    <p>
+                        {{.Description}}
+                    </p>
+                    {{end}}
+
+                    <small>
+                        {{.Category}} • {{.DueDate}}
+                    </small>
+
+                </div>
+
+
+                <div class="recent-task-status">
+
+                    {{if .Completed}}
+
+                    <span class="badge completed-badge">
+                        ✅ Completed
+                    </span>
+
+                    {{else}}
+
+                    <span class="badge pending-badge">
+                        ⏳ Pending
+                    </span>
+
+                    {{end}}
+
+                </div>
+
+            </div>
+
+            {{end}}
+
+        </div>
+
+
+        {{else}}
+
+        <div class="empty-state">
+
+            <h3>📭 No Recent Tasks</h3>
+
+            <p>
+                You haven't created any tasks yet.
+            </p>
+
+            <a href="/tasks/new" class="btn btn-success">
+                ➕ Create Your First Task
+            </a>
+
+        </div>
+
+        {{end}}
+
     </div>
 
 
-    <div class="stat-card rate">
-        <h3>📈 Completion Rate</h3>
-        <h1>{{.CompletionRate}}%</h1>
+    <!-- Dashboard Actions -->
+
+    <div class="dashboard-actions">
+
+        <a href="/tasks" class="btn">
+            📋 View All Tasks
+        </a>
+
+        <a href="/tasks/new" class="btn btn-success">
+            ➕ Create New Task
+        </a>
+
     </div>
 
 </div>
-
-
-<div class="dashboard-actions">
-
-    <a href="/tasks" class="btn">
-        📋 View Tasks
-    </a>
-
-
-    <a href="/tasks/new" class="btn btn-success">
-        ➕ New Task
-    </a>
-
-</div>
-
 
 {{end}}
+

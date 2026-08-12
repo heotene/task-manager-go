@@ -1,76 +1,168 @@
 {{define "content"}}
 
-<h1>Create New Task</h1>
+<div class="auth-container">
 
-<form method="POST" action="/tasks/new">
 
-    <label>Title</label>
-    <input type="text" name="title">
+    <div class="auth-card">
 
-    <label>Description</label>
-    <textarea name="description"></textarea>
 
-    <label>Priority</label>
-    <select name="priority">
-        <option value="High">High</option>
-        <option value="Medium" selected>Medium</option>
-        <option value="Low">Low</option>
-    </select>
+        <h1>
+            ➕ Create New Task
+        </h1>
+        {{if .Error}} <div class="form-error"> ⚠️ {{.Error}} </div> {{end}}
 
-    <label>Category</label>
-    <select name="category">
-        <option value="Work">Work</option>
-        <option value="Study">Study</option>
-        <option value="Personal">Personal</option>
-    </select>
+        <p class="auth-subtitle">
+            Add a new task to your workspace
+        </p>
 
-    <label>Due Date</label>
-    <input type="date" name="due_date">
 
-    <button type="submit">
-        Create Task
-    </button>
 
-</form>
+
+
+        <form method="POST" action="/tasks/new">
+
+
+
+            <label>
+                📝 Task Title
+            </label>
+
+
+            <input
+                type="text"
+                name="title"
+                placeholder="Enter task title"
+                required
+            >
+
+
+
+
+
+
+            <label>
+                📄 Description
+            </label>
+
+
+            <textarea
+                name="description"
+                rows="5"
+                placeholder="Describe your task..."
+            ></textarea>
+
+
+
+
+
+
+
+
+            <label>
+                🔥 Priority
+            </label>
+
+
+            <select name="priority">
+
+
+                <option value="High">
+                    🔴 High
+                </option>
+
+
+                <option value="Medium">
+                    🟡 Medium
+                </option>
+
+
+                <option value="Low">
+                    🟢 Low
+                </option>
+
+
+            </select>
+
+
+
+
+
+
+
+
+            <label>
+                📂 Category
+            </label>
+
+
+            <select name="category">
+
+
+                <option value="Work">
+                    💼 Work
+                </option>
+
+
+                <option value="Study">
+                    📚 Study
+                </option>
+
+
+                <option value="Personal">
+                    🏠 Personal
+                </option>
+
+
+            </select>
+
+
+
+
+
+
+
+
+            <label>
+                📅 Due Date
+            </label>
+
+
+            <input
+                type="date"
+                name="due_date"
+            >
+
+
+
+
+
+
+
+
+
+            <button 
+            type="submit"
+            class="btn auth-btn">
+
+                ✅ Create Task
+
+            </button>
+
+
+
+
+
+        </form>
+
+
+
+
+
+    </div>
+
+
+
+</div>
+
 
 {{end}}
-
-<label>Title</label>
-<input type="text" name="title" required>
-
-
-<label>Description</label>
-<textarea name="description"></textarea>
-
-
-<label>Priority</label>
-<select name="priority">
-
-    <option value="High">High</option>
-
-    <option value="Medium" selected>Medium</option>
-
-    <option value="Low">Low</option>
-
-</select>
-
-
-<label>Category</label>
-<select name="category">
-
-    <option value="Work">Work</option>
-
-    <option value="Study">Study</option>
-
-    <option value="Personal">Personal</option>
-
-</select>
-
-
-<label>Due Date</label>
-<input type="date" name="due_date">
-
-
-<button type="submit">
-    Create Task
-</button>

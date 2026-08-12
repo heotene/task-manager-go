@@ -12,11 +12,21 @@ var Store = sessions.NewCookieStore(
 
 func CreateSession(w http.ResponseWriter, r *http.Request, userID int) {
 
-	session, _ := Store.Get(r, "session")
+	session, err := Store.Get(r, "session")
+
+	if err != nil {
+		http.Error(w, "Unable to create session", http.StatusInternalServerError)
+		return
+	}
 
 	session.Values["user_id"] = userID
 
-	session.Save(r, w)
+	err = session.Save(r, w)
+
+	if err != nil {
+		http.Error(w, "Unable to save session", http.StatusInternalServerError)
+		return
+	}
 }
 
 func GetUserID(r *http.Request) int {
@@ -39,4 +49,24 @@ func DestroySession(w http.ResponseWriter, r *http.Request) {
 	session.Options.MaxAge = -1
 
 	session.Save(r, w)
+}
+
+func RequireLogin(next http.HandlerFunc) http.HandlerFunc {
+
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		userID := GetUserID(r)
+
+		if userID <= 0 {
+			http.Redirect(
+				w,
+				r,
+				"/login",
+				http.StatusSeeOther,
+			)
+			return
+		}
+
+		next(w, r)
+	}
 }

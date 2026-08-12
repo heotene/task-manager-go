@@ -1,59 +1,337 @@
 {{define "content"}}
 
-<div class="auth-container">
+<div class="auth-card">
 
-    <div class="auth-card">
+    <h1>
+        📝 Create Account
+    </h1>
 
-        <h1>Create Account 🚀</h1>
+    <p class="auth-subtitle">
+        Join Task Manager today
+    </p>
+    {{if .Error}}
+    <div class="error-message">
+        ⚠️ {{.Error}}
+    </div>
+{{end}}
 
-        <p class="auth-subtitle">
-            Join Task Manager and start organizing your work.
-        </p>
+    <form method="POST" action="/register">
 
-        <form method="POST" action="/register">
 
-            <label>Full Name</label>
+        <!-- FULL NAME -->
 
-            <input
-                type="text"
-                name="name"
-                placeholder="Enter your full name"
-                required>
+        <label for="fullname">
+            👤 Full Name
+        </label>
 
-            <label>Email Address</label>
+        <input
+            type="text"
+            id="fullname"
+            name="fullname"
+            placeholder="Enter your full name"
+            required
+        >
+
+
+        <!-- VERIFICATION METHOD -->
+
+        <label>
+            🔐 Verification Method
+        </label>
+
+        <div class="verification-options">
+
+            <label>
+                <input
+                    type="radio"
+                    name="verification_method"
+                    value="email"
+                    checked
+                >
+
+                📧 Email
+            </label>
+
+
+            <label>
+                <input
+                    type="radio"
+                    name="verification_method"
+                    value="phone"
+                >
+
+                📱 Phone
+            </label>
+
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <div id="emailField">
+
+            <label for="email">
+                📧 Email
+            </label>
 
             <input
                 type="email"
+                id="email"
                 name="email"
                 placeholder="Enter your email"
-                required>
+            >
 
-            <label>Password</label>
+        </div>
+
+
+        <!-- PHONE -->
+
+        <div id="phoneField" style="display: none;">
+
+            <label for="phone">
+                📱 Phone Number
+            </label>
 
             <input
-                type="password"
-                name="password"
-                placeholder="Create a password"
-                required>
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="+234 801 234 5678"
+            >
 
-            <button type="submit" class="btn auth-btn">
-                Create Account
-            </button>
+        </div>
 
-        </form>
 
-        <p class="auth-footer">
+        <!-- PASSWORD -->
 
-            Already have an account?
+        <label for="password">
+            🔑 Password
+        </label>
+        <p class="password-hint">
+    Password must be at least 8 characters and contain:
+    <br>
+    • One uppercase letter
+    <br>
+    • One number
+    <br>
+    • One special character
+</p>
 
-            <a href="/login">
-                Login
-            </a>
+       <div class="password-field">
 
-        </p>
+    <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Create password"
+        required
+    >
 
-    </div>
+    <button
+        type="button"
+        onclick="togglePassword('password', this)">
+        👁 Show
+    </button>
 
 </div>
+<div id="passwordStrength" class="password-strength"></div>
+
+
+        <!-- CONFIRM PASSWORD -->
+
+        <label for="confirm_password">
+            🔑 Confirm Password
+        </label>
+
+      <div class="password-field">
+
+    <input
+        type="password"
+        id="confirm_password"
+        name="confirm_password"
+        placeholder="Confirm your password"
+        required
+    >
+
+    <button
+        type="button"
+        onclick="togglePassword('confirm_password', this)">
+        👁 Show
+    </button>
+
+</div>
+
+
+        <button
+            type="submit"
+            class="btn auth-btn"
+        >
+            Create Account
+        </button>
+
+
+    </form>
+
+
+    <p class="auth-footer">
+
+        Already have an account?
+
+        <a href="/login">
+            Login
+        </a>
+
+    </p>
+
+
+</div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const methods = document.querySelectorAll(
+        'input[name="verification_method"]'
+    );
+
+    const emailField = document.getElementById("emailField");
+    const phoneField = document.getElementById("phoneField");
+
+    methods.forEach(function (method) {
+
+        method.addEventListener("change", function () {
+
+            if (this.value === "email") {
+
+                emailField.style.display = "block";
+                phoneField.style.display = "none";
+
+                document.getElementById("email").required = true;
+                document.getElementById("phone").required = false;
+
+            }
+
+            if (this.value === "phone") {
+
+                emailField.style.display = "none";
+                phoneField.style.display = "block";
+
+                document.getElementById("email").required = false;
+                document.getElementById("phone").required = true;
+
+            }
+
+        });
+
+    });
+
+});
+
+</script>
+
+<script>
+    const emailRadio = document.querySelector(
+        'input[name="verification_method"][value="email"]'
+    )
+
+    const phoneRadio = document.querySelector(
+        'input[name="verification_method"][value="phone"]'
+    )
+
+    const emailField = document.getElementById("emailField")
+    const phoneField = document.getElementById("phoneField")
+
+    const emailInput = document.getElementById("email")
+    const phoneInput = document.getElementById("phone")
+
+    function updateVerificationFields() {
+
+        if (emailRadio.checked) {
+
+            emailField.style.display = "block"
+            phoneField.style.display = "none"
+
+            emailInput.required = true
+            phoneInput.required = false
+
+        } else {
+
+            emailField.style.display = "none"
+            phoneField.style.display = "block"
+
+            emailInput.required = false
+            phoneInput.required = true
+        }
+    }
+
+    emailRadio.addEventListener(
+        "change",
+        updateVerificationFields
+    )
+
+    phoneRadio.addEventListener(
+        "change",
+        updateVerificationFields
+    )
+
+    updateVerificationFields()
+</script>
+
+<script>
+function togglePassword(inputID, button) {
+
+    const input = document.getElementById(inputID)
+
+    if (input.type === "password") {
+        input.type = "text"
+        button.textContent = "🙈 Hide"
+    } else {
+        input.type = "password"
+        button.textContent = "👁 Show"
+    }
+}
+</script>
+
+<script>
+function checkPasswordStrength() {
+
+    const password = document.getElementById("password").value
+    const strength = document.getElementById("passwordStrength")
+
+    let score = 0
+
+    if (password.length >= 8) {
+        score++
+    }
+
+    if (/[A-Z]/.test(password)) {
+        score++
+    }
+
+    if (/[0-9]/.test(password)) {
+        score++
+    }
+
+    if (/[^A-Za-z0-9]/.test(password)) {
+        score++
+    }
+
+ if (password === "") {
+    strength.textContent = ""
+} else if (password.length < 8) {
+    strength.textContent = "🔴 Weak password"
+} else if (score < 4) {
+    strength.textContent = "🟠 Almost strong — check the requirements"
+} else {
+    strength.textContent = "🟢 Strong password"
+}
+}
+
+document
+    .getElementById("password")
+    .addEventListener("input", checkPasswordStrength)
+</script>
+
 
 {{end}}

@@ -1,0 +1,203 @@
+{{define "content"}}
+
+<div class="settings-page">
+
+    <div class="page-header">
+        <div>
+            <h1>⚙️ Settings</h1>
+            <p class="welcome">
+                Manage your account and application preferences.
+            </p>
+        </div>
+    </div>
+
+
+    <!-- Account Settings -->
+
+    <div class="settings-card">
+
+        <div class="settings-card-header">
+            <div>
+                <h2>👤 Account</h2>
+                <p>Your basic account information</p>
+            </div>
+        </div>
+
+        <div class="settings-row">
+
+            <div>
+                <strong>Full Name</strong>
+                <p>{{.User.FullName}}</p>
+            </div>
+
+            <a href="/profile" class="btn btn-small">
+                Edit Profile
+            </a>
+
+        </div>
+
+
+        <div class="settings-row">
+
+            <div>
+                <strong>Email Address</strong>
+                <p>{{.User.Email}}</p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Security -->
+
+    <div class="settings-card">
+
+        <div class="settings-card-header">
+
+            <div>
+                <h2>🔐 Security</h2>
+                <p>Keep your account secure</p>
+            </div>
+
+        </div>
+
+        <div class="settings-row">
+
+            <div>
+                <strong>Password</strong>
+                <p>Change your account password.</p>
+            </div>
+
+            <a href="/change-password" class="btn">
+                Change Password
+            </a>
+
+        </div>
+
+    </div>
+    
+<!-- Notifications -->
+
+<div class="settings-card">
+
+    <div class="settings-card-header">
+        <div>
+            <h2>🔔 Notifications</h2>
+            <p>Manage your notification preferences</p>
+        </div>
+    </div>
+
+
+    <!-- Task Reminders -->
+
+    <div class="settings-option">
+
+        <div>
+            <strong>Task Reminders</strong>
+
+            <p>
+                Receive reminders about upcoming tasks.
+            </p>
+        </div>
+
+        <label class="switch">
+
+            <input
+                type="checkbox"
+                id="taskReminders"
+            >
+
+            <span class="slider"></span>
+
+        </label>
+
+    </div>
+
+
+    <!-- Completed Tasks -->
+
+    <div class="settings-option">
+
+        <div>
+            <strong>Completed Tasks</strong>
+
+            <p>
+                Show notifications when tasks are completed.
+            </p>
+        </div>
+
+        <label class="switch">
+
+            <input
+                type="checkbox"
+                id="completedNotifications"
+            >
+
+            <span class="slider"></span>
+
+        </label>
+
+    </div>
+
+</div>
+
+<!-- Appearance -->
+
+<div class="settings-card">
+
+    <div class="settings-card-header">
+        <div>
+            <h2>🎨 Appearance</h2>
+            <p>Customize how Myjob looks</p>
+        </div>
+    </div>
+
+    <div class="settings-option">
+
+        <div>
+            <strong>Dark Mode</strong>
+
+            <p>
+                Use a darker interface that's easier on the eyes.
+            </p>
+        </div>
+
+        <label class="switch">
+
+            <input
+                type="checkbox"
+                id="darkModeToggle"
+            >
+
+            <span class="slider"></span>
+
+        </label>
+
+    </div>
+
+</div>
+
+<!-- Danger Zone -->
+
+<div class="settings-card danger-zone">
+
+    <div class="settings-card-header">
+
+        <h2>⚠️ Danger Zone</h2>
+
+        <p>
+            Permanently delete your Myjob account and all your tasks.
+        </p>
+
+    </div>
+
+    <a
+        href="/settings/delete-account"
+        class="btn btn-danger"
+    >
+        🗑️ Delete My Account
+    </a>
+
+</div>
+{{end}}
